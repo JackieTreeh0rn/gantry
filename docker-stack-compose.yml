@@ -13,6 +13,8 @@ services:
     image: shizunge/gantry
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - gantry
     environment:
       - "TZ=America/New_York"
       - "GANTRY_NODE_NAME={{.Node.Hostname}}"
@@ -37,8 +39,14 @@ services:
     image: crazymax/swarm-cronjob:latest
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - gantry
     deploy:
       placement:
         constraints:
           - node.role==manager
     logging: *default-logging
+
+networks:
+  gantry:
+    external: true
